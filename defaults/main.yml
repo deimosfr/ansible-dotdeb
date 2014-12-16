@@ -1,0 +1,3 @@
+dotdeb_repo_version: wheezy
+dotdeb_extra_repo: False
+dotdeb_extra_repo_version: wheezy-php56

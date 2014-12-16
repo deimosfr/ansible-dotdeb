@@ -1,0 +1,22 @@
+---
+
+- name: add dotdeb repository
+  apt_repository: repo='{{ item }}' state=present
+  register: dotdeb
+  with_items:
+    - "deb http://packages.dotdeb.org {{ dotdeb_repo_version }} all"
+    - "deb-src http://packages.dotdeb.org {{ dotdeb_repo_version }} all"
+  tags: dotdeb
+
+- name: add extra dotdeb repository
+  apt_repository: repo='{{ item }}' state=present
+  with_items:
+    - "deb http://packages.dotdeb.org {{ dotdeb_extra_repo_version }} all"
+    - "deb-src http://packages.dotdeb.org {{ dotdeb_extra_repo_version }} all"
+  when: dotdeb_extra_repo == True
+  tags: dotdeb
+
+- name: install dotdeb key
+  apt_key: url='http://www.dotdeb.org/dotdeb.gpg'
+  when: dotdeb|success
+  tags: dotdeb
