@@ -18,5 +18,6 @@
 
 - name: install dotdeb key
   apt_key: url='http://www.dotdeb.org/dotdeb.gpg'
-  when: dotdeb|failed
+  changed_when: False
+  when: dotdeb|success
   tags: dotdeb
