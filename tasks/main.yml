@@ -2,10 +2,11 @@
 
 - name: add dotdeb repository
   apt_repository: repo='{{ item }}' state=present
-  register: dotdeb
+  register: dotdeb_installed
   with_items:
     - "deb http://packages.dotdeb.org {{ dotdeb_repo_version }} all"
     - "deb-src http://packages.dotdeb.org {{ dotdeb_repo_version }} all"
+  notify: update apt cache
   tags: dotdeb
 
 - name: add extra dotdeb repository
@@ -13,11 +14,11 @@
   with_items:
     - "deb http://packages.dotdeb.org {{ dotdeb_extra_repo_version }} all"
     - "deb-src http://packages.dotdeb.org {{ dotdeb_extra_repo_version }} all"
-  when: dotdeb_extra_repo == True
+  when: dotdeb_extra_repo
+  notify: update apt cache
   tags: dotdeb
 
 - name: install dotdeb key
   apt_key: url='http://www.dotdeb.org/dotdeb.gpg'
-  changed_when: False
-  when: dotdeb|success
+  when: dotdeb_installed|success
   tags: dotdeb
